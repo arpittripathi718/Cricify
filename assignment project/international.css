@@ -1,0 +1,167 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color:#008089 ;
+}
+.container{
+     background-color:#73b9fb;
+    height: 80px;
+    display: flex;
+    position: relative;
+    z-index: 10;
+}
+.nav{
+    background-color: hsla(198, 98%, 38%, 0.929);
+    
+}
+.nav{
+    height:100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    
+}
+ .nav button{
+   
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+.nav button{
+    background-color: rgb(135, 206, 235);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    border-color: rgb(37, 34, 102);
+    border-radius: 2px solid rgb(37, 34, 102);
+}
+.nav button a{
+    text-decoration: none;
+    color:rgb(37, 34, 102);
+    font-weight: bold;
+}
+.nav button:hover{
+    background-color: rgb(34, 102, 42);
+}
+
+.nav .btn1 {
+    margin-left: 30%;
+}
+
+.nav .btn2 {
+    margin-right: 30%;
+
+}
+
+.nav .logo{
+    height: 80px;
+    width: 200px;
+    background-image: url("logo.png");
+    background-size: cover;
+    background-position: center;
+    margin-top: 20px;
+}
+.card{
+   height: 250px;
+   width: 420px;
+   background-color: rgb(222, 241, 248);
+   position: fixed;
+    top: 42%;
+    left: 37%;
+    border-radius: 20px;
+
+}
+.card:hover{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transform: scale(1.1);
+    transition: transform 0.5s;
+}
+.card h5{
+
+    padding: 20px;
+   
+    color: rgb(37, 34, 102);
+    font-weight: bold;
+   
+}
+.card .time{
+    padding: 20px;
+    color: rgb(34, 9, 80);
+    
+}
+.card h3{
+    padding-left: 10px;
+   
+}
+
+
+
+.card1{
+   height: 250px;
+   width: 420px;
+   background-color: rgb(222, 241, 248);
+   position: fixed;
+    top: 42%;
+    left: 30px;
+    border-radius: 20px;
+
+}
+.card1:hover{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transform: scale(1.1);
+    transition: transform 0.5s;
+}
+.card1 h5{
+
+    padding: 20px;
+   
+    color: rgb(3, 2, 31);
+    font-weight: bold;
+   
+}
+.card1 .time1{
+    padding: 20px;
+    color: red;
+    
+}
+.card1 h3{
+    padding-left: 10px;
+   
+}
+
+
+.card2{
+   height: 250px;
+   width: 420px;
+   background-color: rgb(222, 241, 248);
+   position: fixed;
+    top: 42%;
+    right: 30px;
+    border-radius: 20px;
+
+}
+.card2:hover{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transform: scale(1.1);
+    transition: transform 0.5s;
+}
+.card2 h5{
+
+    padding: 20px;
+   
+    color: rgb(37, 34, 102);
+    font-weight: bold;
+   
+}
+.card2 .time2{
+    padding: 20px;
+    color: red;
+    
+}
+.card2 h3{
+    padding-left: 10px;
+   
+}
