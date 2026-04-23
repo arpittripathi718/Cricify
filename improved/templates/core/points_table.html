@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section">
+    <div class="section-head">
+        <h2>Points Table</h2>
+        <span class="live-dot" id="update-indicator" style="display:none;">● UPDATING</span>
+    </div>
+
+    <div class="card">
+        <table class="table" id="points-table">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Matches</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Points</th>
+                    <th>NRR</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table %}
+                <tr>
+                    <td>{{ row.team.name }}</td>
+                    <td>{{ row.matches }}</td>
+                    <td>{{ row.wins }}</td>
+                    <td>{{ row.losses }}</td>
+                    <td>{{ row.points }}</td>
+                    <td>{{ row.net_run_rate }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+// Har 15 seconds mein points table update kro
+function updatePointsTable() {
+    const indicator = document.getElementById('update-indicator');
+    indicator.style.display = 'inline-block';
+    
+    fetch('{% url "api_points_table" %}')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('#points-table tbody');
+            tbody.innerHTML = '';
+            
+            data.table.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.team_name}</td>
+                    <td>${row.matches}</td>
+                    <td>${row.wins}</td>
+                    <td>${row.losses}</td>
+                    <td>${row.points}</td>
+                    <td>${row.net_run_rate.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            
+            indicator.style.display = 'none';
+        })
+        .catch(error => {
+            console.error('Points table update failed:', error);
+            indicator.style.display = 'none';
+        });
+}
+
+// Page load par first update
+updatePointsTable();
+
+// Har 15 seconds update kro
+setInterval(updatePointsTable, 15000);
+</script>
+{% endblock %}

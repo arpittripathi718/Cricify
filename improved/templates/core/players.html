@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Players — CRICIFY{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="section-head">
+        <h2>👤 Players</h2>
+    </div>
+
+    <form method="GET" class="filter-form card">
+        <div class="filter-group">
+            <label>Filter by Role</label>
+            <select name="role" onchange="this.form.submit()">
+                <option value="">All Roles</option>
+                <option value="Batsman" {% if role_filter == 'Batsman' %}selected{% endif %}>Batsman</option>
+                <option value="Bowler" {% if role_filter == 'Bowler' %}selected{% endif %}>Bowler</option>
+                <option value="All-Rounder" {% if role_filter == 'All-Rounder' %}selected{% endif %}>All-Rounder</option>
+                <option value="Wicket-Keeper" {% if role_filter == 'Wicket-Keeper' %}selected{% endif %}>Wicket-Keeper</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Filter by Team</label>
+            <select name="team" onchange="this.form.submit()">
+                <option value="">All Teams</option>
+                {% for team in teams %}
+                <option value="{{ team.id }}" {% if team_filter == team.id|stringformat:"s" %}selected{% endif %}>{{ team.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% if role_filter or team_filter %}
+        <a href="{% url 'players' %}" class="clear-filter">✕ Clear filters</a>
+        {% endif %}
+    </form>
+
+    <div class="grid cards-4" style="margin-top:18px">
+        {% for player in players %}
+        <a href="{% url 'player_detail' player.id %}" class="card player-card">
+            {% if player.image %}
+            <img src="{{ player.image.url }}" alt="{{ player.name }}">
+            {% else %}
+            <div class="player-placeholder">{{ player.name|first }}</div>
+            {% endif %}
+            <h3>{{ player.name }}</h3>
+            <p class="muted">{{ player.team.name }}</p>
+            <span class="role-badge role-{{ player.role|lower|cut:'-'|cut:' ' }}">{{ player.role }}</span>
+        </a>
+        {% empty %}
+        <div class="card empty-state">No players found.</div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

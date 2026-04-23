@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% block title %}Live Scorecard — CRICIFY{% endblock %}
+{% block content %}
+
+<section class="section">
+    <div class="breadcrumb">
+        <a href="{% url 'home' %}">Home</a> &rsaquo;
+        <a href="{% url 'live_scores' %}">Live</a> &rsaquo;
+        <span>Scorecard</span>
+    </div>
+
+    {% if scorecard and scorecard.scorecard %}
+    <div class="card live-header-card">
+        <div class="live-header-top">
+            <span class="badge live">● LIVE</span>
+            <span class="refresh-info muted">🔄 Auto-refresh: <span id="countdown">15</span>s</span>
+        </div>
+
+        <h1>Live Scorecard</h1>
+        <p id="match-status" class="match-status-text">{{ scorecard.matchHeader.status }}</p>
+    </div>
+
+    {% for inning in scorecard.scorecard %}
+    <div class="card" style="margin-top:20px">
+        <h2 class="inning-title">
+            🏏 {{ inning.batteamname }} Innings
+            — {{ inning.score }}/{{ inning.wickets }}
+            ({{ inning.overs }} ov)
+        </h2>
+
+        <h3 class="sub-title">Batting</h3>
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Batsman</th>
+                        <th>R</th>
+                        <th>B</th>
+                        <th>4s</th>
+                        <th>6s</th>
+                        <th>SR</th>
+                        <th>Dismissal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bat in inning.batsman %}
+                    <tr>
+                        <td>
+                            <strong>{{ bat.name }}</strong>
+                            {% if bat.iscaptain %}<small>(c)</small>{% endif %}
+                            {% if bat.iskeeper %}<small>(wk)</small>{% endif %}
+                        </td>
+                        <td>{{ bat.runs }}</td>
+                        <td>{{ bat.balls }}</td>
+                        <td>{{ bat.fours }}</td>
+                        <td>{{ bat.sixes }}</td>
+                        <td>{{ bat.strkrate }}</td>
+                        <td>{{ bat.outdec }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="extras-row">
+            <span>
+                Extras: <strong>{{ inning.extras.total|default:"0" }}</strong>
+                (b {{ inning.extras.byes|default:"0" }},
+                lb {{ inning.extras.legbyes|default:"0" }},
+                w {{ inning.extras.wides|default:"0" }},
+                nb {{ inning.extras.noballs|default:"0" }})
+            </span>
+            <span>
+                Total: <strong>{{ inning.score }}/{{ inning.wickets }}</strong>
+                ({{ inning.overs }} ov, RR: {{ inning.runrate }})
+            </span>
+        </div>
+
+        <h3 class="sub-title" style="margin-top:22px">🎳 Bowling</h3>
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Bowler</th>
+                        <th>O</th>
+                        <th>M</th>
+                        <th>R</th>
+                        <th>W</th>
+                        <th>Econ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bowl in inning.bowler %}
+                    <tr>
+                        <td><strong>{{ bowl.name }}</strong></td>
+                        <td>{{ bowl.overs }}</td>
+                        <td>{{ bowl.maidens }}</td>
+                        <td>{{ bowl.runs }}</td>
+                        <td>{{ bowl.wickets }}</td>
+                        <td>{{ bowl.economy }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <div class="card empty-state">
+        <p>⚠️ Scorecard Didn't load .</p>
+        <p class="muted">please check your api key or try again later.</p>
+    </div>
+    {% endif %}
+</section>
+
+<script>
+let countdown = 15;
+const countdownEl = document.getElementById('countdown');
+const matchId = "{{ match_id }}";
+
+function updateScorecard() {
+    countdown = 15;
+    
+    fetch(`/api/live-score/${matchId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) return;
+            
+            // Update status
+            const statusEl = document.getElementById('match-status');
+            if (statusEl) statusEl.textContent = data.matchHeader.status;
+            
+            // Update innings
+            const inningsData = data.scorecard;
+            const inningsEls = document.querySelectorAll('.inning-title');
+            
+            inningsEls.forEach((el, idx) => {
+                if (inningsData[idx]) {
+                    const inning = inningsData[idx];
+                    el.innerHTML = `
+                        🏏 ${inning.batteamname} Innings
+                        — ${inning.score}/${inning.wickets}
+                        (${inning.overs} ov)
+                    `;
+                }
+            });
+            
+            console.log('Scorecard updated at', new Date().toLocaleTimeString());
+        })
+        .catch(error => console.error('Update failed:', error));
+}
+
+// Pehle page load par update
+updateScorecard();
+
+// Countdown timer
+setInterval(() => {
+    countdown--;
+    if (countdownEl) countdownEl.textContent = countdown;
+    if (countdown <= 0) {
+        updateScorecard();
+    }
+}, 1000);
+</script>
+
+{% endblock %}

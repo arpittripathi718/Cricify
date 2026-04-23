@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <circle cx="50" cy="50" r="46" fill="#cc2200"/>
+  <circle cx="50" cy="50" r="46" fill="none" stroke="#aa1800" stroke-width="2"/>
+  <!-- Seam lines -->
+  <path d="M 50 4 C 30 20, 30 80, 50 96" fill="none" stroke="#f5f0e8" stroke-width="2.5"/>
+  <path d="M 50 4 C 70 20, 70 80, 50 96" fill="none" stroke="#f5f0e8" stroke-width="2.5"/>
+  <!-- Stitch marks left seam -->
+  <line x1="34" y1="22" x2="40" y2="25" stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="31" y1="33" x2="37" y2="36" stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="30" y1="45" x2="36" y2="48" stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="30" y1="57" x2="36" y2="54" stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="31" y1="68" x2="37" y2="65" stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Stitch marks right seam -->
+  <line x1="66" y1="22" x2="60" y2="25" stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="69" y1="33" x2="63" y2="36" stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="70" y1="45" x2="64" y2="48" stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="70" y1="57" x2="64" y2="54" stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="69" y1="68" x2="63" y2="65" stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

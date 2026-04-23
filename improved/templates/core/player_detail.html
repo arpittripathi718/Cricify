@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}{{ player.name }} — CRICIFY{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="breadcrumb">
+        <a href="{% url 'home' %}">Home</a> &rsaquo;
+        <a href="{% url 'players' %}">Players</a> &rsaquo;
+        <span>{{ player.name }}</span>
+    </div>
+
+    <div class="player-hero card">
+        {% if player.image %}
+        <img src="{{ player.image.url }}" alt="{{ player.name }}" class="player-hero-img">
+        {% else %}
+        <div class="player-hero-placeholder">{{ player.name|first }}</div>
+        {% endif %}
+        <div class="player-hero-info">
+            <h1>{{ player.name }}</h1>
+            <a href="{% url 'team_detail' player.team.id %}" class="muted team-link">
+                {% if player.team.logo %}<img src="{{ player.team.logo.url }}" alt="{{ player.team.name }}" width="22" style="display:inline;vertical-align:middle;border-radius:50%;margin-right:6px">{% endif %}
+                {{ player.team.name }}
+            </a>
+            <span class="role-badge role-{{ player.role|lower|cut:'-'|cut:' ' }}" style="margin-top:10px;display:inline-block">{{ player.role }}</span>
+
+            <div class="player-stats-grid">
+                {% if player.batting_style %}
+                <div class="stat-box">
+                    <small>Batting Style</small>
+                    <strong>{{ player.batting_style }}</strong>
+                </div>
+                {% endif %}
+                {% if player.bowling_style %}
+                <div class="stat-box">
+                    <small>Bowling Style</small>
+                    <strong>{{ player.bowling_style }}</strong>
+                </div>
+                {% endif %}
+                <div class="stat-box">
+                    <small>Country</small>
+                    <strong>{{ player.team.country|default:"—" }}</strong>
+                </div>
+            </div>
+
+            {% if player.bio %}
+            <p class="player-bio">{{ player.bio }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if teammates %}
+    <div class="section-head" style="margin-top:28px">
+        <h2>Teammates</h2>
+        <a href="{% url 'team_detail' player.team.id %}">View full squad</a>
+    </div>
+    <div class="grid cards-4">
+        {% for mate in teammates %}
+        <a href="{% url 'player_detail' mate.id %}" class="card player-card">
+            {% if mate.image %}
+            <img src="{{ mate.image.url }}" alt="{{ mate.name }}">
+            {% else %}
+            <div class="player-placeholder">{{ mate.name|first }}</div>
+            {% endif %}
+            <h3>{{ mate.name }}</h3>
+            <small class="muted">{{ mate.role }}</small>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

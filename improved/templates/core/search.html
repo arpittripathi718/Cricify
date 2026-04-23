@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Search: {{ query }} — CRICIFY{% endblock %}
+{% block content %}
+<section class="section">
+    <h1 class="search-heading">
+        {% if query %}Search results for "<span class="primary-text">{{ query }}</span>"{% else %}Search CRICIFY{% endif %}
+    </h1>
+
+    <form action="{% url 'search' %}" method="GET" class="search-big-form">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search matches, news, teams, players..." autofocus>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if query %}
+
+    {% if results.matches %}
+    <div class="section-head"><h2>🏏 Matches</h2></div>
+    <div class="grid cards-3">
+        {% for match in results.matches %}
+        <a href="{% url 'match_detail' match.id %}" class="card">
+            <span class="badge {{ match.status|lower }}">{{ match.status }}</span>
+            <h3>{{ match.title }}</h3>
+            <p>{{ match.team1.short_name }} vs {{ match.team2.short_name }}</p>
+            <small>{{ match.venue }}</small>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if results.news %}
+    <div class="section-head" style="margin-top:24px"><h2>📰 News</h2></div>
+    <div class="grid cards-2">
+        {% for item in results.news %}
+        <a href="{% url 'news_detail' item.slug %}" class="card news-card">
+            {% if item.thumbnail %}<img src="{{ item.thumbnail.url }}" alt="{{ item.title }}">{% endif %}
+            <div>
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.summary|truncatechars:100 }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if results.teams %}
+    <div class="section-head" style="margin-top:24px"><h2>🏆 Teams</h2></div>
+    <div class="grid cards-4">
+        {% for team in results.teams %}
+        <a href="{% url 'team_detail' team.id %}" class="card team-card">
+            {% if team.logo %}<img src="{{ team.logo.url }}" alt="{{ team.name }}">{% endif %}
+            <h3>{{ team.name }}</h3>
+            <small>{{ team.country }}</small>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if results.players %}
+    <div class="section-head" style="margin-top:24px"><h2>👤 Players</h2></div>
+    <div class="grid cards-4">
+        {% for player in results.players %}
+        <a href="{% url 'player_detail' player.id %}" class="card player-card">
+            {% if player.image %}<img src="{{ player.image.url }}" alt="{{ player.name }}">
+            {% else %}<div class="player-placeholder">{{ player.name|first }}</div>{% endif %}
+            <h3>{{ player.name }}</h3>
+            <small>{{ player.team.name }}</small>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not results.matches and not results.news and not results.teams and not results.players %}
+    <div class="card empty-state">
+        <p>😔 No results found for "<strong>{{ query }}</strong>".</p>
+        <p>Try different keywords.</p>
+    </div>
+    {% endif %}
+
+    {% endif %}
+</section>
+{% endblock %}

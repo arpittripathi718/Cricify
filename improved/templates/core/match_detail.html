@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section">
+    <div class="match-banner card">
+        <span class="badge {{ match.status|lower }}">{{ match.status }}</span>
+        <h1>{{ match.title }}</h1>
+        <p>{{ match.team1.name }} vs {{ match.team2.name }}</p>
+        <p>{{ match.venue }}</p>
+        <p>{{ match.date }}</p>
+
+        <div class="score-row">
+            <div class="score-box">
+                <h3>{{ match.team1.short_name }}</h3>
+                <p>{{ match.score_team1|default:"Yet to bat" }}</p>
+            </div>
+            <div class="score-box">
+                <h3>{{ match.team2.short_name }}</h3>
+                <p>{{ match.score_team2|default:"Yet to bat" }}</p>
+            </div>
+        </div>
+
+        <h3>Result</h3>
+        <p>{{ match.result|default:"Match not completed." }}</p>
+
+        <h3>Description</h3>
+        <p>{{ match.description|default:"No extra details added." }}</p>
+    </div>
+</section>
+{% endblock %}

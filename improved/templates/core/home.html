@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Welcome to <span class="brand-text">CRICIFY</span></h1>
+        <p>Your modern cricket hub for live scores, match updates, team rankings, player profiles and breaking news.</p>
+        <div class="hero-btns">
+            <a href="{% url 'matches' %}" class="btn-primary">View Matches</a>
+            <a href="{% url 'points_table' %}" class="btn-outline">Points Table</a>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-head">
+        <h2>🔴 Live Matches</h2>
+        <a href="{% url 'matches' %}">View all</a>
+    </div>
+    <div class="grid cards-3">
+        {% for match in live_matches %}
+        <a href="{% url 'match_detail' match.id %}" class="card live-card">
+            <span class="badge live">● LIVE</span>
+            <h3>{{ match.title }}</h3>
+            <p>{{ match.team1.short_name }} vs {{ match.team2.short_name }}</p>
+            <div class="score-mini">
+                <span>{{ match.score_team1|default:"—" }}</span>
+                <span class="vs-text">vs</span>
+                <span>{{ match.score_team2|default:"—" }}</span>
+            </div>
+            <small class="muted">📍 {{ match.venue }}</small>
+        </a>
+        {% empty %}
+        <div class="card empty-state">No live matches currently.</div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-head">
+        <h2>📅 Upcoming Matches</h2>
+    </div>
+    <div class="grid cards-3">
+        {% for match in upcoming_matches %}
+        <a href="{% url 'match_detail' match.id %}" class="card">
+            <span class="badge upcoming">Upcoming</span>
+            <h3>{{ match.title }}</h3>
+            <p>{{ match.team1.name }} vs {{ match.team2.name }}</p>
+            <p class="muted">🗓 {{ match.date|date:"d M Y, H:i" }}</p>
+            <small class="muted">📍 {{ match.venue }}</small>
+        </a>
+        {% empty %}
+        <div class="card empty-state">No upcoming matches.</div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section two-col">
+    <div>
+        <div class="section-head">
+            <h2>📰 Latest News</h2>
+            <a href="{% url 'news' %}">View all</a>
+        </div>
+        <div class="grid cards-2">
+            {% for item in latest_news %}
+            <a href="{% url 'news_detail' item.slug %}" class="card news-card">
+                {% if item.thumbnail %}
+                <img src="{{ item.thumbnail.url }}" alt="{{ item.title }}">
+                {% endif %}
+                <div>
+                    <h3>{{ item.title }}</h3>
+                    <p class="muted">{{ item.summary|truncatechars:100 }}</p>
+                    <small>{{ item.published_at|date:"d M Y" }}</small>
+                </div>
+            </a>
+            {% empty %}
+            <div class="card empty-state">No news added yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <div class="section-head">
+            <h2>🏆 Points Table</h2>
+            <a href="{% url 'points_table' %}">Full table</a>
+        </div>
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Team</th>
+                        <th>M</th>
+                        <th>W</th>
+                        <th>L</th>
+                        <th>Pts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in points %}
+                    <tr>
+                        <td class="muted">{{ forloop.counter }}</td>
+                        <td><a href="{% url 'team_detail' row.team.id %}">{{ row.team.short_name }}</a></td>
+                        <td>{{ row.matches }}</td>
+                        <td>{{ row.wins }}</td>
+                        <td>{{ row.losses }}</td>
+                        <td><strong>{{ row.points }}</strong></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6">No data</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

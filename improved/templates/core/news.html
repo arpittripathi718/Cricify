@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Cricket News — CRICIFY{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="section-head">
+        <h2>📰 Cricket News</h2>
+    </div>
+    <div class="grid cards-2">
+        {% for item in news_list %}
+        <a href="{% url 'news_detail' item.slug %}" class="card news-card">
+            {% if item.thumbnail %}
+            <img src="{{ item.thumbnail.url }}" alt="{{ item.title }}">
+            {% endif %}
+            <div>
+                <h3>{{ item.title }}</h3>
+                <p class="muted">{{ item.summary|truncatechars:130 }}</p>
+                <small>📅 {{ item.published_at|date:"d M Y, H:i" }}</small>
+            </div>
+        </a>
+        {% empty %}
+        <div class="card empty-state">No news articles yet.</div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

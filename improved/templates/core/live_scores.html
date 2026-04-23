@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Live Scores — CRICIFY{% endblock %}
+{% block content %}
+
+<section class="section">
+    <div class="section-head">
+        <h2>🔴 Live Matches</h2>
+        <span class="live-dot">● LIVE</span>
+    </div>
+
+    {% if matches %}
+    <div class="grid cards-2">
+        {% for match in matches %}
+        <a href="{% url 'live_match_detail' match.id %}" class="card live-score-card">
+            <div class="live-card-header">
+                <span class="badge live">● LIVE</span>
+                <small class="muted">{{ match.desc }}</small>
+            </div>
+            <h3>{{ match.team1 }} vs {{ match.team2 }}</h3>
+            <p class="muted">🏆 {{ match.series }}</p>
+            <p class="muted">📍 {{ match.venue }}</p>
+
+            <!-- Scores -->
+            {% if match.score %}
+            <div class="score-list" style="margin-top:12px">
+                {% with t1=match.score.team1Score %}
+                {% if t1 %}
+                <div class="score-item">
+                    <strong>{{ match.team1 }}</strong>
+                    <span>
+                        {% if t1.inngs1 %}{{ t1.inngs1.runs }}/{{ t1.inngs1.wickets }} ({{ t1.inngs1.overs }} ov){% endif %}
+                        {% if t1.inngs2 %} &amp; {{ t1.inngs2.runs }}/{{ t1.inngs2.wickets }}{% endif %}
+                    </span>
+                </div>
+                {% endif %}
+                {% endwith %}
+                {% with t2=match.score.team2Score %}
+                {% if t2 %}
+                <div class="score-item">
+                    <strong>{{ match.team2 }}</strong>
+                    <span>
+                        {% if t2.inngs1 %}{{ t2.inngs1.runs }}/{{ t2.inngs1.wickets }} ({{ t2.inngs1.overs }} ov){% endif %}
+                        {% if t2.inngs2 %} &amp; {{ t2.inngs2.runs }}/{{ t2.inngs2.wickets }}{% endif %}
+                    </span>
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+            {% endif %}
+
+            <p class="match-status-text" style="margin-top:10px">{{ match.status }}</p>
+            <span class="view-live-btn">View Full Scorecard →</span>
+        </a>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="card empty-state">
+        <p>😴 Abhi koi live match nahi chal raha.</p>
+        <p class="muted">Jab koi match start hoga tab yahan dikhega.</p>
+    </div>
+    {% endif %}
+
+</section>
+{% endblock %}

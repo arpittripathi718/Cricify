@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section">
+    <div class="section-head">
+        <h2>All Matches</h2>
+    </div>
+
+    <div class="grid cards-3">
+        {% for match in matches %}
+        <a href="{% url 'match_detail' match.id %}" class="card">
+            <span class="badge {{ match.status|lower }}">{{ match.status }}</span>
+            <h3>{{ match.title }}</h3>
+            <p>{{ match.team1.name }} vs {{ match.team2.name }}</p>
+            <p>{{ match.date }}</p>
+            <small>{{ match.venue }}</small>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

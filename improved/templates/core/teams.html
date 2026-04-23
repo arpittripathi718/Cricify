@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Teams — CRICIFY{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="section-head">
+        <h2>🏆 Teams</h2>
+    </div>
+    <div class="grid cards-4">
+        {% for team in teams %}
+        <a href="{% url 'team_detail' team.id %}" class="card team-card">
+            {% if team.logo %}
+            <img src="{{ team.logo.url }}" alt="{{ team.name }}">
+            {% else %}
+            <div class="team-logo-placeholder">{{ team.short_name }}</div>
+            {% endif %}
+            <h3>{{ team.name }}</h3>
+            <p class="muted">{{ team.country }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
